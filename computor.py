@@ -83,7 +83,7 @@ def print_reduced_equation(equation):
             else:
                 text += "- " + str(value * (-1)) + " * X^" + str(i) + " "
     if text == '':
-        return "0 = 0"
+        return "0 = 0\nSolution: Any real number is a solution!"
     text += "= 0"
     return text
 
@@ -160,8 +160,14 @@ def print_solved_equation(equation, reduced_equation, solutions, discriminant, d
 
     if discriminant > 0:
         print('Discriminant is strictly positive')
-    if discriminant < 0:
+    elif discriminant < 0:
         print('Discriminant is strictly negative')
+    elif discriminant == 0:
+        print('Discriminant is 0')
+    if a == 0 and b == 0 and c != 0:
+        print("Solution: There is not a solution!")
+        print()
+
     if degree == 1:
         type = "c + bx = 0"
         print("Solution:")
@@ -171,19 +177,23 @@ def print_solved_equation(equation, reduced_equation, solutions, discriminant, d
         print("STEPS:")
         print("\tWe have an equation of type: %s" % type)
         print("\t" + print_reduced_equation(reduced_equation))
-        print("\t(" + str(b) + ")*(X) = " + str(-1 * c))
+        print("\t(" + str(b) + ")*X = " + str(-1 * c))
         print("\tX = " + str(-1 * c) + "/" + str(b))
-        print("\tX = " + str(-1 * c / b))
+        print("\tX = " + round_eq(-1 * c / b))
         print()
         print("Discriminant:\n   D = b^2 - 4ac")
         print('\tDiscriminant = (' + str(b) + ")^2 - 4*(" + str(a) + ")*(" + str(c) + ") = " + str(discriminant))
     elif degree == 2:
         type = "c + bx + ax^2 = 0"
-        print("Solutions: ")
         x1 = solutions[0]
-        print("X1 = " + str(x1))
         x2 = solutions[1]
-        print("X2 = " + str(x2))
+        if x1 == x2:
+            print("Solution:")
+            print("X = " + str(x1))
+        else:
+            print("Solutions: ")
+            print("X1 = " + str(x1))
+            print("X2 = " + str(x2))
         print()
         print("STEPS:")
         print("\tWe have an equation of type: %s" % type)
@@ -234,7 +244,7 @@ def solve(equation):
     discriminant = b ** 2 - 4 * a * c
 
     solutions = []
-    if discriminant > 0:
+    if discriminant >= 0:
         if degree == 0:
             if c != 0:
                 exit(-1)
@@ -258,8 +268,10 @@ def solve(equation):
 
     print_solved_equation(equation, reduced_equation, solutions, discriminant, degree)
 
+
 def round_eq(value):
     return str(round(value, 2))
+
 
 def main():
     if len(sys.argv) == 2:
